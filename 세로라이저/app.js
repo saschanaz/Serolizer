@@ -5,10 +5,21 @@
             '。': /\./g,
             '！': /!/g,
             '？': /\?/g,
-            '「': /\//g,
-            '』': /"/g,
+            '（': /\)/g,
+            '）': /\(/g,
+            '／': /\//g,
             '　': /( |\t)/g
         };
+        this.quotationDictionary = {
+            '「」’': '\'',
+            '『』': '"'
+        };
+        this.alphabetDictionary = {};
+        var list = "ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｘｙｘｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ".split('');
+        var dict = this.alphabetDictionary;
+        list.forEach(function (char) {
+            dict[char] = String.fromCharCode(char.charCodeAt(0) - 65248);
+        });
     }
     Serolizer.prototype.convert = function (target, height) {
         var _this = this;
@@ -31,8 +42,29 @@
     };
 
     Serolizer.prototype.replaceToFullWidth = function (target) {
-        for (var fullwidth in this.regexDictionary) {
+        for (var fullwidth in this.regexDictionary)
             target = target.replace(this.regexDictionary[fullwidth], fullwidth);
+        for (var fullwidth in this.alphabetDictionary)
+            target = target.replace(new RegExp(this.alphabetDictionary[fullwidth], 'g'), fullwidth);
+        return this.replaceQuotations(target);
+    };
+
+    Serolizer.prototype.replaceQuotations = function (target) {
+        for (var quotationmark in this.quotationDictionary) {
+            var first = true;
+            var match = target.match(new RegExp(this.quotationDictionary[quotationmark], 'g'));
+            if (match) {
+                var regexp = new RegExp(this.quotationDictionary[quotationmark]);
+                for (var i = 0; i < Math.floor(match.length / 2) * 2; i++) {
+                    if (first)
+                        target = target.replace(regexp, quotationmark[0]);
+else
+                        target = target.replace(regexp, quotationmark[1]);
+                    first = !first;
+                }
+                if (first && match.length != Math.floor(match.length / 2) * 2)
+                    target = target.replace(regexp, quotationmark[2]);
+            }
         }
         return target;
     };
@@ -64,14 +96,20 @@
     };
 
     Serolizer.prototype.getTransformedEmptyArray = function (strarray) {
+        var insertExtraSpace = extraspace.checked;
         var resultarray = [];
         for (var i = 0; i < strarray[0].length; i++) {
             resultarray.push('');
         }
 
-        for (var i = 0; i < resultarray.length; i++)
-            for (var i2 = strarray.length - 1; i2 >= 0; i2--)
-                resultarray[i] += '　' + strarray[i2][i];
+        if (insertExtraSpace)
+            for (var i = 0; i < resultarray.length; i++)
+                for (var i2 = strarray.length - 1; i2 >= 0; i2--)
+                    resultarray[i] += '　' + strarray[i2][i];
+else
+            for (var i = 0; i < resultarray.length; i++)
+                for (var i2 = strarray.length - 1; i2 >= 0; i2--)
+                    resultarray[i] += strarray[i2][i];
         return resultarray;
     };
 

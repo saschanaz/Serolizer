@@ -1,6 +1,7 @@
 ﻿declare var text: HTMLTextAreaElement;
 declare var textvertical: HTMLTextAreaElement;
 declare var height: HTMLInputElement;
+declare var extraspace: HTMLInputElement;
 
 class Serolizer {
     private regexDictionary = {
@@ -8,9 +9,24 @@ class Serolizer {
         '。': /\./g,
         '！': /!/g,
         '？': /\?/g,
-        '「': /\//g,
-        '』': /"/g,
+        '（': /\)/g,
+        '）': /\(/g,
+        '／': /\//g,
         '　': /( |\t)/g
+    }
+    private quotationDictionary = {
+        '「」’': '\'',
+        '『』': '"',
+    }
+    private alphabetDictionary = {
+    }
+
+    constructor() {
+        var list = "ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｘｙｘｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ".split('');
+        var dict = this.alphabetDictionary;
+        list.forEach(function (char) {
+            dict[char] = String.fromCharCode(char.charCodeAt(0) - 65248);
+        });
     }
 
     convert(target: string, height: number) {
@@ -33,8 +49,29 @@ class Serolizer {
     }
 
     private replaceToFullWidth(target: string) {
-        for (var fullwidth in this.regexDictionary) {
+        for (var fullwidth in this.regexDictionary)
             target = target.replace(<RegExp>this.regexDictionary[fullwidth], fullwidth);
+        for (var fullwidth in this.alphabetDictionary)
+            target = target.replace(new RegExp(this.alphabetDictionary[fullwidth], 'g'), fullwidth);
+        return this.replaceQuotations(target);
+    }
+
+    private replaceQuotations(target: string) {
+        for (var quotationmark in this.quotationDictionary) {
+            var first = true;
+            var match = target.match(new RegExp(this.quotationDictionary[quotationmark], 'g'));
+            if (match) {
+                var regexp = new RegExp(this.quotationDictionary[quotationmark])
+                for (var i = 0; i < Math.floor(match.length / 2) * 2; i++) {
+                    if (first)
+                        target = target.replace(regexp, quotationmark[0]);
+                    else
+                        target = target.replace(regexp, quotationmark[1]);
+                    first = !first;
+                }
+                if (first && match.length != Math.floor(match.length / 2) * 2)
+                    target = target.replace(regexp, quotationmark[2]);
+            }
         }
         return target;
     }
@@ -66,14 +103,20 @@ class Serolizer {
     }
 
     private getTransformedEmptyArray(strarray: string[]) {
+        var insertExtraSpace = extraspace.checked;
         var resultarray = [];
         for (var i = 0; i < strarray[0].length; i++) {
             resultarray.push('');
         }
 
-        for (var i = 0; i < resultarray.length; i++)
-            for (var i2 = strarray.length - 1; i2 >= 0; i2--)
-                resultarray[i] += '　' + strarray[i2][i];
+        if (insertExtraSpace)
+            for (var i = 0; i < resultarray.length; i++)
+                for (var i2 = strarray.length - 1; i2 >= 0; i2--)
+                    resultarray[i] += '　' + strarray[i2][i];
+        else 
+            for (var i = 0; i < resultarray.length; i++)
+                for (var i2 = strarray.length - 1; i2 >= 0; i2--)
+                    resultarray[i] += strarray[i2][i];
         return resultarray;
     }
 
