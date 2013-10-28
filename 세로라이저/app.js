@@ -1,9 +1,7 @@
 ﻿var Serolizer = (function () {
     function Serolizer() {
         this.regexDictionary = {
-            '、': /,/g,
             '。': /\./g,
-            '！': /!/g,
             '？': /\?/g,
             '（': /\)/g,
             '）': /\(/g,
@@ -14,9 +12,14 @@
             '「」’': '\'',
             '『』': '"'
         };
-        this.alphabetDictionary = {};
+        this.charDictionary = {
+            '、': ',',
+            '！': '!',
+            '＠': '@',
+            'ㅣ': '-'
+        };
         var list = "ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｘｙｘｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ".split('');
-        var dict = this.alphabetDictionary;
+        var dict = this.charDictionary;
         list.forEach(function (char) {
             dict[char] = String.fromCharCode(char.charCodeAt(0) - 65248);
         });
@@ -30,7 +33,7 @@
         });
 
         var mergedLineArray = this.mergeMultipleTransformedArrays(results);
-        return this.mergeLines(mergedLineArray);
+        return this.mergeLines(this.optimizeLines(mergedLineArray));
     };
 
     Serolizer.prototype.mergeLines = function (lines) {
@@ -44,8 +47,8 @@
     Serolizer.prototype.replaceToFullWidth = function (target) {
         for (var fullwidth in this.regexDictionary)
             target = target.replace(this.regexDictionary[fullwidth], fullwidth);
-        for (var fullwidth in this.alphabetDictionary)
-            target = target.replace(new RegExp(this.alphabetDictionary[fullwidth], 'g'), fullwidth);
+        for (var fullwidth in this.charDictionary)
+            target = target.replace(new RegExp(this.charDictionary[fullwidth], 'g'), fullwidth);
         return this.replaceQuotations(target);
     };
 
@@ -76,7 +79,7 @@ else
         //this.getTransformedEmptyArray(splitted).forEach((str: string) => {
         //    result += str + "\r\n";
         //});
-        return this.getTransformedEmptyArray(splitted);
+        return this.getTransformedArray(splitted);
     };
 
     Serolizer.prototype.splitByLength = function (target, height) {
@@ -95,7 +98,7 @@ else
         return target;
     };
 
-    Serolizer.prototype.getTransformedEmptyArray = function (strarray) {
+    Serolizer.prototype.getTransformedArray = function (strarray) {
         var insertExtraSpace = extraspace.checked;
         var resultarray = [];
         for (var i = 0; i < strarray[0].length; i++) {
@@ -128,6 +131,19 @@ else
             strarrays = strarrays.splice(1);
         }
         return result;
+    };
+
+    Serolizer.prototype.optimizeLines = function (strarray) {
+        var resultarray = [];
+        strarray.forEach(function (str) {
+            str = str.slice(1);
+            while (str[str.length - 1] === '　')
+                str = str.slice(0, str.length - 1);
+            resultarray.push(str);
+        });
+        while (resultarray[resultarray.length - 1].length == 0)
+            resultarray.pop();
+        return resultarray;
     };
     return Serolizer;
 })();

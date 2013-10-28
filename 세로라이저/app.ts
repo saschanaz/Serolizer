@@ -5,25 +5,27 @@ declare var extraspace: HTMLInputElement;
 
 class Serolizer {
     private regexDictionary = {
-        '、': /,/g,
         '。': /\./g,
-        '！': /!/g,
         '？': /\?/g,
         '（': /\)/g,
         '）': /\(/g,
         '／': /\//g,
-        '　': /( |\t)/g
+        '　': /( |\t)/g,
     }
     private quotationDictionary = {
         '「」’': '\'',
         '『』': '"',
     }
-    private alphabetDictionary = {
+    private charDictionary = {
+        '、': ',',
+        '！': '!',
+        '＠': '@',
+        'ㅣ': '-',//Hangul hack
     }
 
     constructor() {
         var list = "ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｘｙｘｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ".split('');
-        var dict = this.alphabetDictionary;
+        var dict = this.charDictionary;
         list.forEach(function (char) {
             dict[char] = String.fromCharCode(char.charCodeAt(0) - 65248);
         });
@@ -37,7 +39,7 @@ class Serolizer {
         });
 
         var mergedLineArray = this.mergeMultipleTransformedArrays(results);
-        return this.mergeLines(mergedLineArray);
+        return this.mergeLines(this.optimizeLines(mergedLineArray));
     }
 
     private mergeLines(lines: string[]) {
@@ -51,8 +53,8 @@ class Serolizer {
     private replaceToFullWidth(target: string) {
         for (var fullwidth in this.regexDictionary)
             target = target.replace(<RegExp>this.regexDictionary[fullwidth], fullwidth);
-        for (var fullwidth in this.alphabetDictionary)
-            target = target.replace(new RegExp(this.alphabetDictionary[fullwidth], 'g'), fullwidth);
+        for (var fullwidth in this.charDictionary)
+            target = target.replace(new RegExp(this.charDictionary[fullwidth], 'g'), fullwidth);
         return this.replaceQuotations(target);
     }
 
@@ -83,7 +85,7 @@ class Serolizer {
         //    result += str + "\r\n";
         //});
 
-        return this.getTransformedEmptyArray(splitted);
+        return this.getTransformedArray(splitted);
     }
 
     private splitByLength(target: string, height: number) {
@@ -102,7 +104,7 @@ class Serolizer {
         return target;
     }
 
-    private getTransformedEmptyArray(strarray: string[]) {
+    private getTransformedArray(strarray: string[]) {
         var insertExtraSpace = extraspace.checked;
         var resultarray = [];
         for (var i = 0; i < strarray[0].length; i++) {
@@ -135,6 +137,19 @@ class Serolizer {
             strarrays = strarrays.splice(1);
         }
         return result;
+    }
+
+    private optimizeLines(strarray: string[]) {
+        var resultarray: string[] = [];
+        strarray.forEach((str) => {
+            str = str.slice(1);
+            while (str[str.length - 1] === '　')
+                str = str.slice(0, str.length - 1);
+            resultarray.push(str);
+        });
+        while (resultarray[resultarray.length - 1].length == 0)
+            resultarray.pop();
+        return resultarray;
     }
 }
 function convert() {
