@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "세로라이저", "세로라이저\세로라이저.csproj", "{D7BE3117-FE5A-4AA4-8EE2-4868E2B73E3A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serolizer", "Serolizer\세로라이저.csproj", "{D7BE3117-FE5A-4AA4-8EE2-4868E2B73E3A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
