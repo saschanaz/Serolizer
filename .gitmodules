@@ -1,0 +1,3 @@
+[submodule "Serolizer/gridpolyfill"]
+	path = Serolizer/gridpolyfill
+	url = https://github.com/codler/Grid-Layout-Polyfill.git

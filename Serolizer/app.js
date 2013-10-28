@@ -1,4 +1,5 @@
-﻿var Serolizer = (function () {
+﻿//TODO: 높이 대신 너비로 설정하기도 가능하게
+var Serolizer = (function () {
     function Serolizer() {
         this.regexDictionary = {
             '。': /\./g,
@@ -16,7 +17,11 @@
             '、': ',',
             '！': '!',
             '＠': '@',
-            'ㅣ': '-'
+            'ㅣ': '-',
+            '「': '‘',
+            '」': '’',
+            '『': '“',
+            '』': '”'
         };
         var list = "ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｘｙｘｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ".split('');
         var dict = this.charDictionary;

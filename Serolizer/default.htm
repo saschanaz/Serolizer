@@ -12,20 +12,36 @@
 	@-moz-viewport { width: device-width; }
 	@-o-viewport { width: device-width; }
 	@viewport { width: device-width; }
-	html, body { height: 100%; }
+	html, body, #contentDiv { height: 100%; margin: 0; }
 	</style>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="gridpolyfill/grid-layout-polyfill.js"></script>
 </head>
 <body>
-    <h1>세로라이저</h1>
+    <div id="contentDiv" style="display: -ms-grid; -ms-grid-rows: auto 1fr auto 1fr; -ms-grid-columns: 1fr;">
+        <h1 style="-ms-grid-row: 1">세로라이저</h1>
 
-    <div style="height: calc(100% - 180px)">
-        <textarea id="text" style="width: 100%; height: 50%">리스트도 세로로 만들고 옆으로 스크롤하고 죽간배경에 문자더 따옴표랑 마침표를 온점과 꺾음표로 치환!</textarea>
-        <div>
+        <textarea id="text" style="-ms-grid-row: 2">리스트도 세로로 만들고 옆으로 스크롤하고 죽간배경에 문자더 따옴표랑 마침표를 온점과 꺾음표로 치환!</textarea>
+        <div style="-ms-grid-row: 3">
             높이: <input id="height" type="number" value="7" /><input type="checkbox" id="extraspace" checked="checked" /><label for="extraspace">매 줄마다 공간 넣기</label><br />
             <input type="button" value="변환" onclick="convert()" />
         </div>
-        <textarea id="textvertical" style="width: 100%; height: 50%; font-family: Georgia,'Times New Roman',serif;"></textarea>
+        <textarea id="textvertical" style="-ms-grid-row: 4; font-family: georgia,'times new roman',serif;"></textarea>
+        <script src="app.js"></script>
+        <script>
+            jQuery(function ($) {
+                if ($.support.gridLayout) return;
+
+                if (document.documentElement.style.msGridRows === undefined) {
+                    var resizer = function () {
+                        $('#contentDiv').height(window.innerHeight + 'px');
+                        $('#contentDiv').gridLayout('refresh');
+                    };
+                    window.addEventListener('resize', resizer);
+                    resizer();
+                }
+            });
+        </script>
     </div>
-    <script src="app.js"></script>
 </body>
 </html>

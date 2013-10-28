@@ -3,6 +3,7 @@ declare var textvertical: HTMLTextAreaElement;
 declare var height: HTMLInputElement;
 declare var extraspace: HTMLInputElement;
 
+//TODO: 높이 대신 너비로 설정하기도 가능하게
 class Serolizer {
     private regexDictionary = {
         '。': /\./g,
@@ -21,6 +22,10 @@ class Serolizer {
         '！': '!',
         '＠': '@',
         'ㅣ': '-',//Hangul hack
+        '「': '‘',
+        '」': '’',
+        '『': '“',
+        '』': '”',
     }
 
     constructor() {
