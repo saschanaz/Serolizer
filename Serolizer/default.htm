@@ -32,14 +32,12 @@
             jQuery(function ($) {
                 if ($.support.gridLayout) return;
 
-                if (document.documentElement.style.msGridRows === undefined) {
-                    var resizer = function () {
-                        $('#contentDiv').height(window.innerHeight + 'px');
-                        $('#contentDiv').gridLayout('refresh');
-                    };
-                    window.addEventListener('resize', resizer);
-                    resizer();
-                }
+                var resizer = function () {
+                    $('#contentDiv').height(window.innerHeight + 'px');
+                    $('#contentDiv').gridLayout('refresh');
+                };
+                window.addEventListener('resize', resizer);
+                resizer();
             });
         </script>
     </div>

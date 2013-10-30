@@ -146,8 +146,10 @@ class Serolizer {
 
     private optimizeLines(strarray: string[]) {
         var resultarray: string[] = [];
+        var insertExtraSpace = extraspace.checked;
         strarray.forEach((str) => {
-            str = str.slice(1);
+            if (insertExtraSpace)
+                str = str.slice(1);
             while (str[str.length - 1] === '　')
                 str = str.slice(0, str.length - 1);
             resultarray.push(str);
