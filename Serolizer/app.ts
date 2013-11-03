@@ -163,7 +163,6 @@ function convert() {
     textvertical.value = new Serolizer().convert(text.value, <number><any>height.value);
 }
 function selectAll() {
-    textvertical.focus();
     textvertical.select();
 }
 convert();
