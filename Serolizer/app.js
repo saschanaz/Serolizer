@@ -157,5 +157,8 @@ else
 function convert() {
     textvertical.value = new Serolizer().convert(text.value, height.value);
 }
+function selectAll() {
+    textvertical.select();
+}
 convert();
 //# sourceMappingURL=app.js.map
