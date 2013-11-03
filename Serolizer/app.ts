@@ -162,4 +162,7 @@ class Serolizer {
 function convert() {
     textvertical.value = new Serolizer().convert(text.value, <number><any>height.value);
 }
+function selectAll() {
+    textvertical.select();
+}
 convert();
