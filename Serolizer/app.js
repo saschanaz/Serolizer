@@ -158,6 +158,7 @@ function convert() {
     textvertical.value = new Serolizer().convert(text.value, height.value);
 }
 function selectAll() {
+    textvertical.focus();
     textvertical.select();
 }
 convert();
