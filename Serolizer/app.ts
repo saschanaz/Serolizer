@@ -165,4 +165,20 @@ function convert() {
 function selectAll() {
     textvertical.select();
 }
+function getImage() {
+    var popup = window.open('about:blank');
+    //IE and Chrome load this, Firefox ignores
+    setImage(popup.document);
+    //Firefox load this, IE and Chrome ignores
+    popup.onload = () => {
+        setImage(popup.document);
+    };
+}
+function setImage(doc: Document) {
+    while (doc.body.firstChild)
+        doc.body.removeChild(doc.body.firstChild);
+    var img = doc.createElement('img');
+    img.src = Imagenator.convertText(new Serolizer().convert(text.value, <number><any>height.value));
+    doc.body.appendChild(img);
+}
 convert();
