@@ -14,8 +14,8 @@ class Serolizer {
         '　': /( |\t)/g,
     }
     private quotationDictionary = {
-        '「」’': '\'',
-        '『』': '"',
+        '「」＇': '\'',
+        '『』』': '"',
     }
     private charDictionary = {
         '、': ',',
@@ -166,13 +166,8 @@ function selectAll() {
     textvertical.select();
 }
 function getImage() {
-    var popup = window.open('about:blank');
-    //IE and Chrome load this, Firefox ignores
+    var popup = window.open();
     setImage(popup.document);
-    //Firefox load this, IE and Chrome ignores
-    popup.onload = () => {
-        setImage(popup.document);
-    };
 }
 function setImage(doc: Document) {
     while (doc.body.firstChild)

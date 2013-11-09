@@ -10,8 +10,8 @@ var Serolizer = (function () {
             '　': /( |\t)/g
         };
         this.quotationDictionary = {
-            '「」’': '\'',
-            '『』': '"'
+            '「」＇': '\'',
+            '『』』': '"'
         };
         this.charDictionary = {
             '、': ',',
@@ -161,15 +161,14 @@ function selectAll() {
     textvertical.select();
 }
 function getImage() {
-    var popup = window.open('about:blank');
+    var popup = window.open();
 
     //IE and Chrome load this, Firefox ignores
     setImage(popup.document);
-
     //Firefox load this, IE and Chrome ignores
-    popup.onload = function () {
-        setImage(popup.document);
-    };
+    //popup.onload = () => {
+    //    setImage(popup.document);
+    //};
 }
 function setImage(doc) {
     while (doc.body.firstChild)
