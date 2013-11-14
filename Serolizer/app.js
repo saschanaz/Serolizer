@@ -160,15 +160,17 @@ function convert() {
 function selectAll() {
     textvertical.select();
 }
+function copy() {
+    try  {
+        textvertical.createTextRange().execCommand('copy');
+        alert('클립보드에 복사했습니다, 바로 다른 곳에 붙여넣어 보세요.');
+    } catch (e) {
+        alert('브라우저가 클립보드 복사를 제한하고 있습니다. 죄송합니다.');
+    }
+}
 function getImage() {
     var popup = window.open();
-
-    //IE and Chrome load this, Firefox ignores
     setImage(popup.document);
-    //Firefox load this, IE and Chrome ignores
-    //popup.onload = () => {
-    //    setImage(popup.document);
-    //};
 }
 function setImage(doc) {
     while (doc.body.firstChild)
