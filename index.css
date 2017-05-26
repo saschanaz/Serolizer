@@ -2,11 +2,47 @@
     width: device-width; 
 }
 
-html, body, #contentDiv { 
+html, body, .content { 
     height: 100%;
     margin: 0; 
 }
 
 body {
     font-family: 'Segoe UI', sans-serif
+}
+
+.content {
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-rows: auto 1fr auto 1fr;
+    grid-template-rows: auto 1fr auto 1fr;
+    -ms-grid-columns: 1fr;
+    grid-template-columns: 1fr;
+}
+
+.content > * {
+    margin: 8px;
+}
+
+h1 {
+    -ms-grid-row: 1;
+    grid-row: 1;
+}
+
+#text {
+    -ms-grid-row: 2;
+    grid-row: 2;
+}
+
+.button-container {
+    -ms-grid-row: 3;
+    grid-row: 3;
+}
+
+#textvertical {
+    -ms-grid-row: 4;
+    grid-row: 4;
+    font-family: monospace;
+    overflow: auto;
+    white-space: nowrap;
 }

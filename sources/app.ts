@@ -2,6 +2,9 @@
 declare var textvertical: HTMLTextAreaElement;
 declare var height: HTMLInputElement;
 declare var extraspace: HTMLInputElement;
+declare var convertButton: HTMLInputElement;
+declare var selectAllButton: HTMLInputElement;
+declare var getImageButton: HTMLInputElement;
 
 //TODO: 높이 대신 너비로 설정하기도 가능하게
 class Serolizer {
@@ -160,7 +163,7 @@ class Serolizer {
     }
 }
 function convert() {
-    textvertical.innerHTML = new Serolizer().convert(text.value, <number><any>height.value).replace(/\n/g, '<br />');
+    textvertical.innerHTML = new Serolizer().convert(text.value, Number.parseInt(height.value)).replace(/\n/g, '<br />');
 }
 function selectAll() {
     const range = document.createRange();
@@ -175,7 +178,12 @@ function setImage(doc: Document) {
     while (doc.body.firstChild)
         doc.body.removeChild(doc.body.firstChild);
     const img = doc.createElement('img');
-    img.src = Imagenator.convertText(new Serolizer().convert(text.value, <number><any>height.value));
+    img.src = Imagenator.convertText(new Serolizer().convert(text.value, Number.parseInt(height.value)));
     doc.body.appendChild(img);
 }
-document.addEventListener("DOMContentLoaded", () => convert());
+document.addEventListener("DOMContentLoaded", () => {
+    convert();
+    convertButton.addEventListener("click", () => convert());
+    selectAllButton.addEventListener("click", () => selectAll());
+    getImageButton.addEventListener("click", () => getImage());
+});
