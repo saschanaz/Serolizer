@@ -29,26 +29,26 @@ class Serolizer {
     }
 
     constructor() {
-        var list = "ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｘｙｘｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ".split('');
-        var dict = this.charDictionary;
+        const list = "ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｘｙｘｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ".split('');
+        const dict = this.charDictionary;
         list.forEach(function (char) {
             dict[char] = String.fromCharCode(char.charCodeAt(0) - 65248);
         });
     }
 
     convert(target: string, height: number) {
-        var lines = this.replaceToFullWidth(target).split("\n");
-        var results: string[][] = [];
+        const lines = this.replaceToFullWidth(target).split("\n");
+        const results: string[][] = [];
         lines.forEach((line) => {
             results.push(this.transformDirection(line, height));
         });
 
-        var mergedLineArray = this.mergeMultipleTransformedArrays(results);
+        const mergedLineArray = this.mergeMultipleTransformedArrays(results);
         return this.mergeLines(this.optimizeLines(mergedLineArray));
     }
 
     private mergeLines(lines: string[]) {
-        var merged = '';
+        let merged = '';
         lines.forEach((line) => {
             merged += line + "\r\n";
         });
@@ -65,10 +65,10 @@ class Serolizer {
 
     private replaceQuotations(target: string) {
         for (var quotationmark in this.quotationDictionary) {
-            var first = true;
-            var match = target.match(new RegExp(this.quotationDictionary[quotationmark], 'g'));
+            let first = true;
+            const match = target.match(new RegExp(this.quotationDictionary[quotationmark], 'g'));
             if (match) {
-                var regexp = new RegExp(this.quotationDictionary[quotationmark])
+                const regexp = new RegExp(this.quotationDictionary[quotationmark])
                 for (var i = 0; i < Math.floor(match.length / 2) * 2; i++) {
                     if (first)
                         target = target.replace(regexp, quotationmark[0]);
@@ -84,8 +84,8 @@ class Serolizer {
     }
 
     private transformDirection(target: string, height: number) {
-        var result = '';
-        var splitted = this.splitByLength(target, height);
+        const result = '';
+        const splitted = this.splitByLength(target, height);
         //this.getTransformedEmptyArray(splitted).forEach((str: string) => {
         //    result += str + "\r\n";
         //});
@@ -94,7 +94,7 @@ class Serolizer {
     }
 
     private splitByLength(target: string, height: number) {
-        var result: string[] = [];
+        const result: string[] = [];
         while (target.length > height) {
             result.push(this.fillSpace(target.slice(0, height), height));
             target = target.slice(height);
@@ -110,32 +110,32 @@ class Serolizer {
     }
 
     private getTransformedArray(strarray: string[]) {
-        var insertExtraSpace = extraspace.checked;
-        var resultarray = [];
-        for (var i = 0; i < strarray[0].length; i++) {
+        const insertExtraSpace = extraspace.checked;
+        const resultarray = [];
+        for (let i = 0; i < strarray[0].length; i++) {
             resultarray.push('');
         }
 
         if (insertExtraSpace)
-            for (var i = 0; i < resultarray.length; i++)
-                for (var i2 = strarray.length - 1; i2 >= 0; i2--)
+            for (let i = 0; i < resultarray.length; i++)
+                for (let i2 = strarray.length - 1; i2 >= 0; i2--)
                     resultarray[i] += '　' + strarray[i2][i];
         else 
-            for (var i = 0; i < resultarray.length; i++)
-                for (var i2 = strarray.length - 1; i2 >= 0; i2--)
+            for (let i = 0; i < resultarray.length; i++)
+                for (let i2 = strarray.length - 1; i2 >= 0; i2--)
                     resultarray[i] += strarray[i2][i];
         return resultarray;
     }
 
     private mergeTransformedArrays(strarray1: string[], strarray2: string[]) {
-        var result: string[] = [];
-        for (var i = 0; i < strarray1.length; i++)
+        const result: string[] = [];
+        for (let i = 0; i < strarray1.length; i++)
             result.push(strarray2[i] + strarray1[i]);
         return result;
     }
 
     private mergeMultipleTransformedArrays(strarrays: string[][]) {
-        var result = strarrays[0];
+        let result = strarrays[0];
         strarrays = strarrays.splice(1);
         while (strarrays.length > 0) {
             result = this.mergeTransformedArrays(result, strarrays[0]);
@@ -145,8 +145,8 @@ class Serolizer {
     }
 
     private optimizeLines(strarray: string[]) {
-        var resultarray: string[] = [];
-        var insertExtraSpace = extraspace.checked;
+        const resultarray: string[] = [];
+        const insertExtraSpace = extraspace.checked;
         strarray.forEach((str) => {
             if (insertExtraSpace)
                 str = str.slice(1);
@@ -163,19 +163,19 @@ function convert() {
     textvertical.innerHTML = new Serolizer().convert(text.value, <number><any>height.value).replace(/\n/g, '<br />');
 }
 function selectAll() {
-    var range = document.createRange();
+    const range = document.createRange();
     range.selectNodeContents(textvertical);
     getSelection().addRange(range);
 }
 function getImage() {
-    var popup = window.open();
+    const popup = window.open();
     setImage(popup.document);
 }
 function setImage(doc: Document) {
     while (doc.body.firstChild)
         doc.body.removeChild(doc.body.firstChild);
-    var img = doc.createElement('img');
+    const img = doc.createElement('img');
     img.src = Imagenator.convertText(new Serolizer().convert(text.value, <number><any>height.value));
     doc.body.appendChild(img);
 }
-convert();
+document.addEventListener("DOMContentLoaded", () => convert());
